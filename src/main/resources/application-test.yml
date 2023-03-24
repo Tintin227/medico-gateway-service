@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: '${EUREKA_URI:http://192.168.68.69:9761/eureka/}'
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+      file-size-threshold: 20KB
+  application:
+    name: medico-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: medico-booking-service
+          uri: lb://MEDICO-BOOKING
+          predicates:
+            - Path=/booking/**
+          filters:
+            - StripPrefix=1
+        - id: medico-treatment-service
+          uri: lb://MEDICO-TREATMENT
+          predicates:
+            - Path=/treatment/**
+          filters:
+            - StripPrefix=1
+        - id: medico-admin-service
+          uri: lb://MEDICO-ADMIN
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=
+        - id: medico-admin-service
+          uri: lb://MEDICO-AUTH
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+        - id: medico-job-service
+          uri: lb://MEDICO-JOB
+          predicates:
+            - Path=/job/**
+          filters:
+            - StripPrefix=1
+ribbon:
+  ReadTimeout: 90000
+  ConnectTimeout: 90000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
