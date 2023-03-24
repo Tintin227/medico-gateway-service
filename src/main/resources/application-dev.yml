@@ -4,7 +4,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: '${EUREKA_URI:http://192.168.68.69:9761/eureka/}'
+      defaultZone: '${EUREKA_URI:http://172.26.0.1:8761/eureka/}'
 spring:
   servlet:
     multipart:
